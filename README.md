@@ -1,47 +1,108 @@
-Network Traffic Analysis with tcpdump
 
-Project Overview
+# 🕵️‍♂️ Network Traffic Analysis with tcpdump
 
-This project focuses on using tcpdump for network packet analysis on Kali Linux. It involves setting up permissions, capturing network packets, and filtering traffic based on different criteria.
+## Project Overview
 
-Setup and Permissions
+This project focuses on using **tcpdump** for **network packet analysis** on Kali Linux. It involves setting up permissions, capturing network packets, and filtering traffic based on various criteria to observe different types of network traffic.
 
-Initially, running tcpdump -i any resulted in a permission error because capturing network packets requires elevated privileges.
+---
 
-Verified that tcpdump was installed using which tcpdump, which returned the path /usr/bin/tcpdump.
+## 🛠 Setup and Permissions
 
-To allow the user to run tcpdump without root privileges, the user was added to the netdev group using sudo usermod -aG netdev $USER.
+### Initial Setup
+Initially, running the command:
+```bash
+tcpdump -i any
+```
+resulted in a **permission error** because capturing network packets requires elevated privileges.
 
-Further, capabilities were granted using sudo setcap cap_net_raw,cap_net_admin=eip $(which tcpdump), enabling packet capture without needing sudo.
+### Installation Check
+Verified that tcpdump was installed by checking its path:
+```bash
+which tcpdump
+```
+Output:
+```bash
+/usr/bin/tcpdump
+```
 
-Running tcpdump
+### Granting Necessary Permissions
+To run tcpdump without root privileges:
+1. Added the user to the `netdev` group:
+    ```bash
+    sudo usermod -aG netdev $USER
+    ```
 
-After setting up permissions, tcpdump -i any was executed. It displayed a warning that the "any" device does not support promiscuous mode, but packet capture worked.
+2. Set the necessary capabilities to allow tcpdump packet capture without requiring `sudo`:
+    ```bash
+    sudo setcap cap_net_raw,cap_net_admin=eip $(which tcpdump)
+    ```
 
-Network packets were successfully captured, including details like source and destination IP addresses, protocol types, flags (SYN, ACK, etc.), and port numbers.
+---
 
-Filtering Traffic
+## 🚀 Running tcpdump
 
-To analyze specific types of network traffic, different filters were used:
+After setting up the permissions, we ran:
+```bash
+tcpdump -i any
+```
 
-Capturing all packets using tcpdump -i any.
+- A warning appeared stating that the "any" device does not support promiscuous mode, but **packet capture worked successfully**.
 
-Capturing traffic to and from a specific IP using tcpdump -i any host 192.168.1.100. No packets were captured, indicating no communication with this IP.
+### Captured Information
+The following packet details were captured:
+- **Source and Destination IP addresses**
+- **Protocol types** (TCP, UDP, DNS)
+- **Flags** (SYN, ACK, etc.)
+- **Port numbers** (e.g., 80 for HTTP, 443 for HTTPS)
 
-Capturing only TCP traffic using tcpdump -i any tcp.
+---
 
-Capturing only UDP traffic using tcpdump -i any udp.
+## 🔎 Filtering Traffic
 
-Capturing only DNS traffic by filtering port 53 using tcpdump -i any port 53.
+We used various filters to capture specific types of network traffic:
 
-Observations
+1. **Capture all network traffic**:
+    ```bash
+    tcpdump -i any
+    ```
 
-The captured packets showed details such as source and destination IP addresses, protocols (TCP, UDP, DNS), port numbers (e.g., 80 for HTTP, 443 for HTTPS), and specific request data.
+2. **Capture traffic to/from a specific IP**:
+    ```bash
+    tcpdump -i any host 192.168.1.100
+    ```
+    - No packets were captured for this IP, indicating no active communication.
 
-No packets were captured for the specific IP 192.168.1.100, meaning no active communication was detected.
+3. **Capture only TCP traffic**:
+    ```bash
+    tcpdump -i any tcp
+    ```
 
-Various types of network traffic, including HTTPS, DNS queries, and other requests, were successfully recorded and analyzed.
+4. **Capture only UDP traffic**:
+    ```bash
+    tcpdump -i any udp
+    ```
 
-Conclusion
+5. **Capture DNS traffic** (filtering port 53):
+    ```bash
+    tcpdump -i any port 53
+    ```
 
-This project successfully demonstrates how to set up and use tcpdump for network traffic analysis on Kali Linux. By configuring permissions and applying filters, effective packet capture and analysis were performed. This approach can be used for network monitoring, security auditing, and troubleshooting connectivity issues.
+---
+
+## 🧐 Observations
+
+- **Captured Packets**: The captured packets showed details like source/destination IPs, protocols (TCP, UDP, DNS), port numbers (e.g., 80 for HTTP, 443 for HTTPS), and specific request data.
+- **No Communication with Specific IP**: No packets were captured for IP `192.168.1.100`, meaning there was no communication detected with this host.
+- **Diverse Traffic**: Various network traffic types, including **HTTPS**, **DNS queries**, and other requests, were successfully captured and analyzed.
+
+---
+
+## 🏁 Conclusion
+
+This project successfully demonstrates how to set up and use **tcpdump** for **network traffic analysis** on **Kali Linux**. By configuring the necessary permissions and applying filters, effective packet capture and analysis were performed. This approach can be applied for:
+- **Network monitoring**
+- **Security auditing**
+- **Troubleshooting connectivity issues**
+
+This tool is a valuable resource for understanding and analyzing network traffic in real-time.
